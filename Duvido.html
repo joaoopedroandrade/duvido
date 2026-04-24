@@ -166,6 +166,36 @@
 
   <div class="spacer"></div>
   <button class="btn btn-accent" onclick="startGame()">Iniciar jogo →</button>
+  <button class="btn btn-ghost" onclick="showRules()">Como jogar?</button>
+</div>
+
+<!-- MODAL REGRAS -->
+<div id="modal-rules" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;padding:1.5rem;overflow-y:auto;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:480px;margin:auto;margin-top:2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <h2 style="margin:0">Como jogar</h2>
+      <button onclick="hideRules()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0">×</button>
+    </div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.8">
+      <p style="margin-bottom:1rem">O <strong style="color:var(--text)">Duvido!</strong> é um jogo de blefe para 4 jogadores divididos em 2 duplas.</p>
+
+      <p style="color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">1. A categoria secreta</p>
+      <p style="margin-bottom:1rem">A cada rodada, um jogador de cada dupla vê uma categoria (ex: <em>"Cidades do estado de São Paulo"</em>). Os parceiros não podem ver!</p>
+
+      <p style="color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">2. Os lances</p>
+      <p style="margin-bottom:1rem">Os jogadores que viram a categoria fazem lances alternados, apostando quantos itens <strong style="color:var(--text)">seu parceiro</strong> consegue falar. Cada lance deve ser maior que o anterior.</p>
+
+      <p style="color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">3. Duvidar</p>
+      <p style="margin-bottom:1rem">A qualquer momento, o jogador da vez pode <strong style="color:var(--text)">duvidar</strong> do lance anterior em vez de aumentar. Isso encerra os lances.</p>
+
+      <p style="color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">4. O desafio</p>
+      <p style="margin-bottom:1rem">O parceiro do último lance tem <strong style="color:var(--text)">60 segundos</strong> para falar o número apostado de itens da categoria. Se conseguir, ponto para a dupla dele. Se não, ponto para a outra.</p>
+
+      <p style="color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">5. Vencer</p>
+      <p>A primeira dupla a atingir o número de pontos definido no setup vence o jogo!</p>
+    </div>
+    <button class="btn btn-accent" onclick="hideRules()" style="margin-top:1.5rem">Entendi! →</button>
+  </div>
 </div>
 
 <!-- ROUND START -->
@@ -451,6 +481,16 @@ function setPts(n) {
     const btn = document.getElementById('pts-'+v);
     btn.className = 'btn pts-btn' + (v === n ? ' btn-accent' : '');
   });
+}
+
+function showRules() {
+  document.getElementById('modal-rules').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function hideRules() {
+  document.getElementById('modal-rules').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function show(id) {
