@@ -133,18 +133,18 @@
 <!-- SETUP -->
 <div id="s-setup" class="screen active">
   <h1 style="margin-bottom:0.25rem">Duvido!</h1>
-  <p style="margin-bottom:1.5rem">Configure o jogo e bora jogar.</p>
+  <p style="margin-bottom:1.5rem">Hora de montar as duplas</p>
 
   <div class="card">
-    <h3 style="margin-bottom:0.75rem">Dupla X</h3>
-    <input type="text" id="px-a" placeholder="Nome do Jogador A" />
-    <input type="text" id="px-b" placeholder="Nome do Jogador B" style="margin-bottom:0" />
+    <h3 style="margin-bottom:0.75rem">Dupla 1</h3>
+    <input type="text" id="px-a" placeholder="Nome do Primeiro Jogador" />
+    <input type="text" id="px-b" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
   </div>
 
   <div class="card">
-    <h3 style="margin-bottom:0.75rem">Dupla Y</h3>
-    <input type="text" id="py-c" placeholder="Nome do Jogador C" />
-    <input type="text" id="py-d" placeholder="Nome do Jogador D" style="margin-bottom:0" />
+    <h3 style="margin-bottom:0.75rem">Dupla 2</h3>
+    <input type="text" id="py-c" placeholder="Nome do Primeiro Jogador" />
+    <input type="text" id="py-d" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
   </div>
 
   <div class="card">
@@ -159,7 +159,7 @@
 
   <div class="card" style="cursor:pointer" onclick="toggleRevezamento()">    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
       <div style="flex:1">
-        <h3 style="margin-bottom:4px">Alternar funções</h3>
+        <h3 style="margin-bottom:4px">Funções alternadas</h3>
         <p style="font-size:13px">A cada rodada os papéis da dupla se invertem: quem dava o lance agora executa e vice-versa.</p>
       </div>
       <div id="toggle-track" style="flex-shrink:0;width:44px;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);position:relative;transition:background 0.2s">
@@ -184,7 +184,7 @@
       <p style="margin-bottom:1rem">O <strong style="color:var(--text)">Duvido!</strong> é um jogo de blefe para 4 jogadores divididos em 2 duplas.</p>
 
       <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">1. A categoria secreta</p>
-      <p style="margin-bottom:1rem">A cada rodada, um jogador de cada dupla vê uma categoria (ex: <em>"Cidades do estado de São Paulo"</em>). Os parceiros não podem ver!</p>
+      <p style="margin-bottom:1rem">A cada rodada, um jogador de cada dupla vê uma categoria (ex: <em>"Atores famosos"</em>). Os parceiros não podem ver!</p>
 
       <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">2. Os lances</p>
       <p style="margin-bottom:1rem">Os jogadores que viram a categoria fazem lances alternados, apostando quantos itens <strong style="color:var(--text)">seu parceiro</strong> consegue falar. Cada lance deve ser maior que o anterior.</p>
@@ -538,11 +538,11 @@ function buildScoreRow(containerId) {
   el.innerHTML = `
     <div class="score-box${lx?' leading':''}">
       <div class="score-num">${G.scores.x}</div>
-      <div class="score-lbl">Dupla X<br>${G.p.a} & ${G.p.b}</div>
+      <div class="score-lbl">Dupla 1<br>${G.p.a} & ${G.p.b}</div>
     </div>
     <div class="score-box${ly?' leading':''}">
       <div class="score-num">${G.scores.y}</div>
-      <div class="score-lbl">Dupla Y<br>${G.p.c} & ${G.p.d}</div>
+      <div class="score-lbl">Dupla 2<br>${G.p.c} & ${G.p.d}</div>
     </div>`;
 }
 
@@ -561,7 +561,7 @@ function nextRound() {
   document.getElementById('rs-badge').textContent = `Rodada ${G.round}`;
   document.getElementById('rs-title').textContent = `Rodada ${G.round}`;
   document.getElementById('rs-desc').textContent =
-    `Passe o celular para ${seerX} (Dupla X) e ${seerY} (Dupla Y) verem a categoria. ${targetX} e ${targetY} não podem olhar!`;
+    `Passe o celular para ${seerX} (Dupla 1) e ${seerY} (Dupla 2) verem a categoria. ${targetX} e ${targetY} não podem olhar!`;
   show('s-roundstart');
 }
 
@@ -650,10 +650,10 @@ function timerResult(success) {
   const winner = success ? G.challenged.dupla : (G.challenged.dupla === 'x' ? 'y' : 'x');
   G.scores[winner]++;
   buildScoreRow('res-scores');
-  const wName = winner === 'x' ? `Dupla X (${xName()})` : `Dupla Y (${yName()})`;
+  const wName = winner === 'x' ? `Dupla 1 (${xName()})` : `Dupla 2 (${yName()})`;
   if (G.scores[winner] >= G.winPts) {
     buildScoreRow('win-scores');
-    document.getElementById('win-name').textContent = winner === 'x' ? 'Dupla X venceu!' : 'Dupla Y venceu!';
+    document.getElementById('win-name').textContent = winner === 'x' ? 'Dupla 1 venceu!' : 'Dupla 2 venceu!';
     document.getElementById('win-sub').textContent = winner === 'x' ? `${G.p.a} e ${G.p.b} são os campeões!` : `${G.p.c} e ${G.p.d} são os campeões!`;
     show('s-winner');
     return;
