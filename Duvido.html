@@ -117,6 +117,8 @@
   .winner-name { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; text-align: center; color: var(--accent); line-height: 1.1; margin-bottom: 0.5rem; }
   .winner-sub { text-align: center; font-size: 15px; color: var(--muted); }
 
+  .pts-btn { flex: 1; padding: 10px; margin: 0; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+
   .divider { border: none; border-top: 1px solid var(--border); margin: 0.75rem 0; }
 
   .section-gap { height: 0.75rem; }
@@ -141,8 +143,17 @@
     <input type="text" id="py-d" placeholder="Nome do Jogador D" style="margin-bottom:0" />
   </div>
 
-  <div class="card" style="cursor:pointer" onclick="toggleRevezamento()">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+  <div class="card">
+    <h3 style="margin-bottom:0.75rem">Pontos para vencer</h3>
+    <div style="display:flex;gap:8px">
+      <button class="btn pts-btn" onclick="setPts(3)" id="pts-3">3</button>
+      <button class="btn pts-btn btn-accent" onclick="setPts(5)" id="pts-5">5</button>
+      <button class="btn pts-btn" onclick="setPts(7)" id="pts-7">7</button>
+      <button class="btn pts-btn" onclick="setPts(10)" id="pts-10">10</button>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer" onclick="toggleRevezamento()">    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
       <div style="flex:1">
         <h3 style="margin-bottom:4px">Alternar funções</h3>
         <p style="font-size:13px">A cada rodada os papéis da dupla se invertem: quem dava o lance agora executa e vice-versa.</p>
@@ -414,6 +425,7 @@ let G = {
   timerLeft: 60,
   usedCats: [],
   revezamento: false,
+  winPts: 5,
 };
 
 function toggleRevezamento() {
@@ -431,6 +443,14 @@ function toggleRevezamento() {
     thumb.style.left = '3px';
     thumb.style.background = 'var(--muted)';
   }
+}
+
+function setPts(n) {
+  G.winPts = n;
+  [3,5,7,10].forEach(v => {
+    const btn = document.getElementById('pts-'+v);
+    btn.className = 'btn pts-btn' + (v === n ? ' btn-accent' : '');
+  });
 }
 
 function show(id) {
@@ -587,7 +607,7 @@ function timerResult(success) {
   G.scores[winner]++;
   buildScoreRow('res-scores');
   const wName = winner === 'x' ? `Dupla X (${xName()})` : `Dupla Y (${yName()})`;
-  if (G.scores[winner] >= 5) {
+  if (G.scores[winner] >= G.winPts) {
     buildScoreRow('win-scores');
     document.getElementById('win-name').textContent = winner === 'x' ? 'Dupla X venceu!' : 'Dupla Y venceu!';
     document.getElementById('win-sub').textContent = winner === 'x' ? `${G.p.a} e ${G.p.b} são os campeões!` : `${G.p.c} e ${G.p.d} são os campeões!`;
