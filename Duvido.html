@@ -126,8 +126,8 @@
 
 <!-- SETUP -->
 <div id="s-setup" class="screen active">
-  <h1 style="margin-bottom:0.25rem">Blefe!</h1>
-  <p style="margin-bottom:1.5rem">Configure o jogo e escolha as categorias.</p>
+  <h1 style="margin-bottom:0.25rem">Duvido!</h1>
+  <p style="margin-bottom:1.5rem">Configure o jogo e bora jogar.</p>
 
   <div class="card">
     <h3 style="margin-bottom:0.75rem">Dupla X</h3>
@@ -141,12 +141,15 @@
     <input type="text" id="py-d" placeholder="Nome do Jogador D" style="margin-bottom:0" />
   </div>
 
-  <div class="card">
-    <h3 style="margin-bottom:0.75rem">Categorias</h3>
-    <div id="cat-list"></div>
-    <div class="add-cat-row">
-      <input type="text" id="cat-input" placeholder="Adicionar categoria..." />
-      <button class="add-cat-btn" onclick="addCat()">+</button>
+  <div class="card" style="cursor:pointer" onclick="toggleRevezamento()">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="flex:1">
+        <h3 style="margin-bottom:4px">Alternar funções</h3>
+        <p style="font-size:13px">A cada rodada os papéis da dupla se invertem: quem dava o lance agora executa e vice-versa.</p>
+      </div>
+      <div id="toggle-track" style="flex-shrink:0;width:44px;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);position:relative;transition:background 0.2s">
+        <div id="toggle-thumb" style="position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:left 0.2s,background 0.2s"></div>
+      </div>
     </div>
   </div>
 
@@ -408,42 +411,178 @@ let G = {
   challenged: {dupla:'',player:''},
   timerInterval: null,
   timerLeft: 60,
-  usedCats: []
+  usedCats: [],
+  revezamento: false,
 };
 
+function toggleRevezamento() {
+  G.revezamento = !G.revezamento;
+  const track = document.getElementById('toggle-track');
+  const thumb = document.getElementById('toggle-thumb');
+  if (G.revezamento) {
+    track.style.background = 'var(--accent)';
+    track.style.borderColor = 'var(--accent)';
+    thumb.style.left = '23px';
+    thumb.style.background = 'var(--accent-text)';
+  } else {
+    track.style.background = 'var(--surface2)';
+    track.style.borderColor = 'var(--border)';
+    thumb.style.left = '3px';
+    thumb.style.background = 'var(--muted)';
+  }
+}
+    "Cidades do estado do Rio de Janeiro",
+    "Cidades do estado de Minas Gerais",
+    "Cidades do Centro-Oeste do Brasil",
+    "Cidades do Nordeste do Brasil",
+    "Cidades do Norte do Brasil",
+    "Cidades do Sul do Brasil",
+    "Cidades dos Estados Unidos",
+    "Cidades da Europa",
+    "Cidades da América Latina (exceto do Brasil)",
+    "Cidades da Oceania",
+    "Cidades do continente africano",
+    "Cidades do continente asiático",
+    "Cidades com a letra C",
+    "Cidades com a letra M",
+    "Cidades com a letra P",
+    "Cidades com a letra R",
+    "Cidades com a letra S",
+    "Capitais do Brasil",
+    "Capitais da Europa",
+    "Capitais da Ásia",
+    "Capitais da África",
+    "Capitais das Américas",
+    "Estados do Brasil",
+    "Estados dos Estados Unidos",
+    "Países da América do Sul",
+    "Países da América Central",
+    "Países da Europa",
+    "Países da África",
+    "Países da Ásia",
+    "Times do Brasileirão desse ano",
+    "Times de futebol europeus",
+    "Times de futebol não-brasileiros e não-europeus",
+    "Times de futebol ingleses",
+    "Times de futebol que já jogaram a Copinha",
+    "Goleiros",
+    "Técnicos de futebol",
+    "Seleções que ganharam a Copa do Mundo",
+    "Jogadores que já jogaram no Corinthians",
+    "Jogadores que já jogaram no São Paulo",
+    "Jogadores que já jogaram no Palmeiras",
+    "Jogadores que já jogaram no Santos",
+    "Jogadores que já jogaram no Flamengo",
+    "Jogadores que já jogaram no Real Madrid",
+    "Jogadores que já jogaram no Barcelona",
+    "Jogadores que já jogaram no Manchester City",
+    "Jogadores que já jogaram na Seleção Brasileira",
+    "Jogadores que já jogaram uma Copa do Mundo",
+    "Jogadores estrangeiros que já jogaram no Brasil",
+    "Jogadores de futebol com L",
+    "Jogadores de futebol com R",
+    "Jogadores de futebol com S",
+    "Jogadores de futebol com T",
+    "Times da NBA",
+    "Times do NBB",
+    "Jogadores que já jogaram no Franca Basquete",
+    "Brasileiros que já jogaram na NBA",
+    "Times campeões da NBA",
+    "Armadores da NBA",
+    "Pivôs da NBA",
+    "Escuderias da Fórmula 1",
+    "Pilotos de Fórmula 1",
+    "Jogadores de tênis",
+    "Cidades com torneios ATP de tênis",
+    "Atletas brasileiros de qualquer esporte",
+    "Medalhistas olímpicos de ouro",
+    "Medalhistas olímpicos brasileiros",
+    "Lutadores de MMA",
+    "Times da NFL (futebol americano)",
+    "Esportes olímpicos",
+    "Raças de cachorro",
+    "Peixes",
+    "Serpentes",
+    "Flores",
+    "Mamíferos",
+    "Grandes felinos",
+    "Animais domésticos",
+    "Animais selvagens",
+    "Animais marinhos",
+    "Animais que voam",
+    "Animais com a letra C",
+    "Animais com a letra M",
+    "Dinossauros",
+    "Aniversários de pessoas famosas",
+    "Aniversários de pessoas que conhece",
+    "Feriados e datas comemorativas",
+    "Frutas",
+    "Sabores de pizza",
+    "Queijos",
+    "Comidas típicas do Brasil",
+    "Presidentes do Brasil",
+    "Instrumentos musicais",
+    "Bandas de Rock",
+    "Duplas sertanejas",
+    "Cantores brasileiros",
+    "Participantes do Big Brother Brasil",
+    "Músicas sertanejas",
+    "Músicas de rock",
+    "Músicas com a letra D",
+    "Músicas com a letra W",
+    "Músicas da Rihanna",
+    "Músicas da Madonna",
+    "Músicas dos Beatles",
+    "Músicas do Michael Jackson",
+    "Músicas do Bruno Mars",
+    "Músicas do Coldplay",
+    "Músicas do Legião Urbana",
+    "Músicas do Roberto Carlos",
+    "Músicas do Skank",
+    "Séries da Netflix",
+    "Séries de comédia",
+    "Séries policiais",
+    "Filmes da Disney",
+    "Personagens de desenhos",
+    "Personagens de filmes",
+    "Personagens de FRIENDS",
+    "Personagens de How I Met Your Mother",
+    "Personagens de Chaves",
+    "Personagens de Bob Esponja",
+    "Personagens de Dragon Ball",
+    "Personagens de Harry Potter",
+    "Personagens de Todo Mundo Odeia o Chris",
+    "Filmes de romance",
+    "Filmes de terror",
+    "Filmes de animação",
+    "Filmes adolescentes",
+    "Filmes com o Leonardo DiCaprio",
+    "Filmes do Quentin Tarantino",
+    "Atrizes que são ou já foram loiras",
+    "Atrizes que são ou já foram ruivas",
+    "Cantoras que são ou já foram loiras",
+    "Filmes brasileiros",
+    "Atores brasileiros",
+    "Famosos com 1,90m ou mais",
+    "Homens famosos com 1,70m ou menos",
+    "Diretores de cinema",
+    "Constelações famosas",
+    "Signos do zodíaco",
+    "Super-heróis da DC",
+    "Vilões de HQs",
+    "Pontos turísticos do Brasil",
+    "Maravilhas do Mundo",
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
 
-function addCat() {
-  const inp = document.getElementById('cat-input');
-  const v = inp.value.trim();
-  if (!v) return;
-  G.cats.push(v);
-  inp.value = '';
-  renderCats();
-}
-document.getElementById('cat-input').addEventListener('keydown', e => { if(e.key==='Enter') addCat(); });
-
-function removeCat(i) { G.cats.splice(i,1); renderCats(); }
-
-function renderCats() {
-  document.getElementById('cat-list').innerHTML = G.cats.length === 0
-    ? '<p style="font-size:13px;padding:0.5rem 0">Nenhuma categoria adicionada ainda.</p>'
-    : G.cats.map((c,i) =>
-        `<div class="cat-item"><span>${c}</span><button class="cat-remove" onclick="removeCat(${i})">×</button></div>`
-      ).join('');
-}
-renderCats();
-
 function startGame() {
   G.p.a = document.getElementById('px-a').value.trim() || 'Jogador A';
   G.p.b = document.getElementById('px-b').value.trim() || 'Jogador B';
   G.p.c = document.getElementById('py-c').value.trim() || 'Jogador C';
   G.p.d = document.getElementById('py-d').value.trim() || 'Jogador D';
-  if (G.cats.length === 0) { alert('Adicione pelo menos uma categoria!'); return; }
   G.scores = {x:0,y:0};
   G.round = 0;
   G.usedCats = [];
@@ -452,6 +591,20 @@ function startGame() {
 
 function xName() { return `${G.p.a} & ${G.p.b}`; }
 function yName() { return `${G.p.c} & ${G.p.d}`; }
+
+// In revezamento mode, odd rounds: A sees & bids for B; even rounds: B sees & bids for A (same for Y)
+function getSeer(dupla) {
+  if (!G.revezamento) return dupla === 'x' ? G.p.a : G.p.c;
+  const isOdd = G.round % 2 === 1;
+  if (dupla === 'x') return isOdd ? G.p.a : G.p.b;
+  return isOdd ? G.p.c : G.p.d;
+}
+function getTarget(dupla) {
+  if (!G.revezamento) return dupla === 'x' ? G.p.b : G.p.d;
+  const isOdd = G.round % 2 === 1;
+  if (dupla === 'x') return isOdd ? G.p.b : G.p.a;
+  return isOdd ? G.p.d : G.p.c;
+}
 
 function buildScoreRow(containerId) {
   const el = document.getElementById(containerId);
@@ -479,10 +632,12 @@ function nextRound() {
   G.bid = 0;
   G.turn = G.round % 2 === 1 ? 'x' : 'y';
   buildScoreRow('rs-scores');
+  const seerX = getSeer('x'), seerY = getSeer('y');
+  const targetX = getTarget('x'), targetY = getTarget('y');
   document.getElementById('rs-badge').textContent = `Rodada ${G.round}`;
   document.getElementById('rs-title').textContent = `Rodada ${G.round}`;
   document.getElementById('rs-desc').textContent =
-    `Passe o celular para ${G.p.a} (Dupla X) e ${G.p.c} (Dupla Y). Os parceiros ${G.p.b} e ${G.p.d} não podem olhar!`;
+    `Passe o celular para ${seerX} (Dupla X) e ${seerY} (Dupla Y) verem a categoria. ${targetX} e ${targetY} não podem olhar!`;
   show('s-roundstart');
 }
 
@@ -500,9 +655,8 @@ function startBidding() {
 
 function updateBidUI() {
   buildScoreRow('bid-scores');
-  const isX = G.turn === 'x';
-  const bidder = isX ? G.p.a : G.p.c;
-  const target = isX ? G.p.b : G.p.d;
+  const bidder = getSeer(G.turn);
+  const target = getTarget(G.turn);
   document.getElementById('bid-cat-label').textContent = `Categoria: ${G.cat}`;
   document.getElementById('bid-turn').textContent = `Vez de ${bidder}`;
   document.getElementById('bid-num').textContent = G.bid === 0 ? '—' : G.bid;
@@ -515,9 +669,8 @@ function updateBidUI() {
 }
 
 function goRaise() {
-  const isX = G.turn === 'x';
-  const bidder = isX ? G.p.a : G.p.c;
-  const target = isX ? G.p.b : G.p.d;
+  const bidder = getSeer(G.turn);
+  const target = getTarget(G.turn);
   document.getElementById('raise-title').textContent = `Lance de ${bidder}`;
   document.getElementById('raise-desc').textContent = G.bid === 0
     ? `Quantos itens de "${G.cat}" ${target} consegue falar?`
@@ -537,9 +690,9 @@ function confirmRaise() {
 }
 
 function doubt() {
-  const doubter = G.turn === 'x' ? G.p.a : G.p.c;
+  const doubter = getSeer(G.turn);
   const chalDupla = G.turn === 'x' ? 'y' : 'x';
-  const chalPlayer = chalDupla === 'x' ? G.p.b : G.p.d;
+  const chalPlayer = getTarget(chalDupla);
   G.challenged = { dupla: chalDupla, player: chalPlayer };
   document.getElementById('chal-title').textContent = `${doubter} duvidou!`;
   document.getElementById('chal-desc').textContent = `${chalPlayer}, é hora de provar. Você tem 60 segundos:`;
