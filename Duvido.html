@@ -453,7 +453,6 @@ function startGame() {
 function xName() { return `${G.p.a} & ${G.p.b}`; }
 function yName() { return `${G.p.c} & ${G.p.d}`; }
 
-// In revezamento mode, odd rounds: A sees & bids for B; even rounds: B sees & bids for A (same for Y)
 function getSeer(dupla) {
   if (!G.revezamento) return dupla === 'x' ? G.p.a : G.p.c;
   const isOdd = G.round % 2 === 1;
