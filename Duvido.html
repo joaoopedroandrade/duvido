@@ -7,34 +7,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #f0f4ff;
+    --bg: #e6ecff;
     --surface: #ffffff;
-    --surface2: #e8eeff;
-    --border: #d0d8f0;
-    --text: #1a1f3a;
-    --muted: #7a82a8;
-    --accent: #4a7dff;
-    --accent-dim: #dce8ff;
+    --surface2: #d8e2ff;
+    --border: #9aaad8;
+    --text: #0f1530;
+    --muted: #3a4878;
+    --accent: #1d4ed8;
+    --accent-dim: #d0deff;
     --accent-text: #ffffff;
-    --success: #22c55e;
-    --success-dim: #dcfce7;
-    --danger: #f43f7a;
-    --danger-dim: #ffe4ef;
-    --info: #4a7dff;
-    --info-dim: #dce8ff;
-    --warn: #ff6b6b;
-    --warn-dim: #fff0f0;
+    --success: #15803d;
+    --success-dim: #d0fce4;
+    --danger: #dc1560;
+    --danger-dim: #ffd6e8;
+    --info: #1d4ed8;
+    --info-dim: #d0deff;
+    --warn: #c81e1e;
+    --warn-dim: #ffe4e4;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; font-size: 16px; line-height: 1.5; overflow-x: hidden; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; font-size: 18px; line-height: 1.5; overflow-x: hidden; }
 
   .screen { display: none; min-height: 100dvh; padding: 1.5rem 1.25rem 2rem; flex-direction: column; gap: 0; }
   .screen.active { display: flex; }
 
-  h1 { font-family: 'Nunito', sans-serif; font-size: 42px; font-weight: 900; letter-spacing: -1px; color: var(--accent); line-height: 1; }
-  h2 { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
-  h3 { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-  p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  h1 { font-family: 'Nunito', sans-serif; font-size: 48px; font-weight: 900; letter-spacing: -1px; color: var(--accent); line-height: 1; }
+  h2 { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); }
+  h3 { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  p { color: var(--muted); font-size: 15px; line-height: 1.6; }
 
   .card {
     background: var(--surface);
@@ -51,7 +51,7 @@
     border: 1.5px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
-    font-size: 15px;
+    font-size: 17px;
     font-family: 'Nunito Sans', sans-serif;
     color: var(--text);
     margin-bottom: 8px;
@@ -65,7 +65,7 @@
     display: block;
     width: 100%;
     padding: 14px;
-    font-size: 15px;
+    font-size: 17px;
     font-family: 'Nunito', sans-serif;
     font-weight: 800;
     border-radius: 14px;
@@ -88,7 +88,7 @@
   .score-row { display: flex; gap: 10px; margin-bottom: 1rem; }
   .score-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 18px; padding: 1rem; text-align: center; box-shadow: 0 2px 8px rgba(74,125,255,0.06); }
   .score-num { font-family: 'Nunito', sans-serif; font-size: 40px; font-weight: 900; color: var(--accent); line-height: 1; }
-  .score-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .score-lbl { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 600; }
   .score-box.leading { border-color: var(--accent); background: var(--accent-dim); }
 
   .cat-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1.5px solid var(--border); font-size: 14px; color: var(--text); }
@@ -101,8 +101,8 @@
 
   .big-text { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; text-align: center; color: var(--text); background: var(--surface2); border-radius: 16px; padding: 1.5rem 1rem; margin: 0.75rem 0; line-height: 1.2; }
   .bid-num { font-family: 'Nunito', sans-serif; font-size: 72px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1; margin: 0.5rem 0; }
-  .sub-label { font-size: 13px; text-align: center; color: var(--muted); font-weight: 600; }
-  .turn-label { font-size: 15px; text-align: center; color: var(--text); font-weight: 700; margin-bottom: 0.25rem; }
+  .sub-label { font-size: 15px; text-align: center; color: var(--muted); font-weight: 600; }
+  .turn-label { font-size: 17px; text-align: center; color: var(--text); font-weight: 700; margin-bottom: 0.25rem; }
 
   .timer-num { font-family: 'Nunito', sans-serif; font-size: 80px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1; margin: 1rem 0; }
   .timer-num.urgent { color: var(--danger); animation: pulse 0.5s infinite; }
@@ -111,7 +111,7 @@
   .progress-track { background: var(--surface2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 0.5rem; }
   .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 1s linear; }
 
-  .badge { display: inline-block; font-size: 11px; font-weight: 800; font-family: 'Nunito', sans-serif; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; margin-bottom: 0.75rem; background: var(--accent-dim); color: var(--accent); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 800; font-family: 'Nunito', sans-serif; text-transform: uppercase; letter-spacing: 1px; padding: 5px 14px; border-radius: 20px; margin-bottom: 0.75rem; background: var(--accent-dim); color: var(--accent); }
 
   .spacer { flex: 1; }
   .mt1 { margin-top: 0.75rem; }
@@ -119,7 +119,7 @@
 
   .trophy { font-size: 64px; text-align: center; margin: 1rem 0; }
   .winner-name { font-family: 'Nunito', sans-serif; font-size: 32px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1.1; margin-bottom: 0.5rem; }
-  .winner-sub { text-align: center; font-size: 15px; color: var(--muted); font-weight: 600; }
+  .winner-sub { text-align: center; font-size: 17px; color: var(--muted); font-weight: 600; }
 
   .pts-btn { flex: 1; padding: 10px; margin: 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 16px; }
 
@@ -136,15 +136,15 @@
   <p style="margin-bottom:1.5rem">Configure o jogo e bora jogar.</p>
 
   <div class="card">
-    <h3 style="margin-bottom:0.75rem">Dupla 1</h3>
-    <input type="text" id="px-a" placeholder="Nome do Primeiro Jogador" />
-    <input type="text" id="px-b" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
+    <h3 style="margin-bottom:0.75rem">Dupla X</h3>
+    <input type="text" id="px-a" placeholder="Nome do Jogador A" />
+    <input type="text" id="px-b" placeholder="Nome do Jogador B" style="margin-bottom:0" />
   </div>
 
   <div class="card">
-    <h3 style="margin-bottom:0.75rem">Dupla 2</h3>
-    <input type="text" id="py-c" placeholder="Nome do Primeiro Jogador" />
-    <input type="text" id="py-d" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
+    <h3 style="margin-bottom:0.75rem">Dupla Y</h3>
+    <input type="text" id="py-c" placeholder="Nome do Jogador C" />
+    <input type="text" id="py-d" placeholder="Nome do Jogador D" style="margin-bottom:0" />
   </div>
 
   <div class="card">
