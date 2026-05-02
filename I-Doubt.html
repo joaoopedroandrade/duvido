@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Duvido!</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #e6ecff;
+    --surface: #ffffff;
+    --surface2: #d8e2ff;
+    --border: #9aaad8;
+    --text: #0f1530;
+    --muted: #3a4878;
+    --accent: #1d4ed8;
+    --accent-dim: #d0deff;
+    --accent-text: #ffffff;
+    --success: #15803d;
+    --success-dim: #d0fce4;
+    --danger: #dc1560;
+    --danger-dim: #ffd6e8;
+    --info: #1d4ed8;
+    --info-dim: #d0deff;
+    --warn: #c81e1e;
+    --warn-dim: #ffe4e4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', sans-serif; font-size: 18px; line-height: 1.5; overflow-x: hidden; }
+
+  .screen { display: none; min-height: 100dvh; padding: 1.5rem 1.25rem 2rem; flex-direction: column; gap: 0; }
+  .screen.active { display: flex; }
+
+  h1 { font-family: 'Nunito', sans-serif; font-size: 48px; font-weight: 900; letter-spacing: -1px; color: var(--accent); line-height: 1; }
+  h2 { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); }
+  h3 { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(74,125,255,0.06);
+  }
+
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 17px;
+    font-family: 'Nunito Sans', sans-serif;
+    color: var(--text);
+    margin-bottom: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus, input[type="number"]:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-size: 17px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+    transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-accent { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 14px rgba(74,125,255,0.35); }
+  .btn-accent:hover { background: #3a6dee; }
+  .btn-success { background: var(--success-dim); color: var(--success); border-color: var(--success); }
+  .btn-danger { background: var(--danger-dim); color: var(--danger); border-color: var(--danger); }
+  .btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); box-shadow: none; }
+
+  .score-row { display: flex; gap: 10px; margin-bottom: 1rem; }
+  .score-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 18px; padding: 1rem; text-align: center; box-shadow: 0 2px 8px rgba(74,125,255,0.06); }
+  .score-num { font-family: 'Nunito', sans-serif; font-size: 40px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .score-lbl { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .score-box.leading { border-color: var(--accent); background: var(--accent-dim); }
+
+  .cat-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1.5px solid var(--border); font-size: 14px; color: var(--text); }
+  .cat-item:last-child { border-bottom: none; }
+  .cat-remove { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 18px; padding: 0 4px; margin-left: auto; line-height: 1; }
+
+  .add-cat-row { display: flex; gap: 8px; margin-top: 10px; }
+  .add-cat-row input { margin: 0; flex: 1; }
+  .add-cat-btn { background: var(--accent-dim); border: 1.5px solid var(--accent); color: var(--accent); border-radius: 12px; padding: 0 18px; font-size: 20px; cursor: pointer; font-weight: 800; }
+
+  .big-text { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; text-align: center; color: var(--text); background: var(--surface2); border-radius: 16px; padding: 1.5rem 1rem; margin: 0.75rem 0; line-height: 1.2; }
+  .bid-num { font-family: 'Nunito', sans-serif; font-size: 72px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1; margin: 0.5rem 0; }
+  .sub-label { font-size: 15px; text-align: center; color: var(--muted); font-weight: 600; }
+  .turn-label { font-size: 17px; text-align: center; color: var(--text); font-weight: 700; margin-bottom: 0.25rem; }
+
+  .timer-num { font-family: 'Nunito', sans-serif; font-size: 80px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1; margin: 1rem 0; }
+  .timer-num.urgent { color: var(--danger); animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+
+  .progress-track { background: var(--surface2); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 0.5rem; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 1s linear; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 800; font-family: 'Nunito', sans-serif; text-transform: uppercase; letter-spacing: 1px; padding: 5px 14px; border-radius: 20px; margin-bottom: 0.75rem; background: var(--accent-dim); color: var(--accent); }
+
+  .spacer { flex: 1; }
+  .mt1 { margin-top: 0.75rem; }
+  .mb1 { margin-bottom: 0.75rem; }
+
+  .trophy { font-size: 64px; text-align: center; margin: 1rem 0; }
+  .winner-name { font-family: 'Nunito', sans-serif; font-size: 32px; font-weight: 900; text-align: center; color: var(--accent); line-height: 1.1; margin-bottom: 0.5rem; }
+  .winner-sub { text-align: center; font-size: 17px; color: var(--muted); font-weight: 600; }
+
+  .pts-btn { flex: 1; padding: 10px; margin: 0; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 16px; }
+
+  .divider { border: none; border-top: 1.5px solid var(--border); margin: 0.75rem 0; }
+
+  .section-gap { height: 0.75rem; }
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="s-setup" class="screen active">
+  <h1 style="margin-bottom:0.25rem">Duvido!</h1>
+  <p style="margin-bottom:1.5rem">Hora de montar as duplas</p>
+
+  <div class="card">
+    <h3 style="margin-bottom:0.75rem">Dupla 1</h3>
+    <input type="text" id="px-a" placeholder="Nome do Primeiro Jogador" />
+    <input type="text" id="px-b" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:0.75rem">Dupla 2</h3>
+    <input type="text" id="py-c" placeholder="Nome do Primeiro Jogador" />
+    <input type="text" id="py-d" placeholder="Nome do Segundo Jogador" style="margin-bottom:0" />
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:0.75rem">Pontos para vencer</h3>
+    <div style="display:flex;gap:8px">
+      <button class="btn pts-btn" onclick="setPts(3)" id="pts-3">3</button>
+      <button class="btn pts-btn btn-accent" onclick="setPts(5)" id="pts-5">5</button>
+      <button class="btn pts-btn" onclick="setPts(7)" id="pts-7">7</button>
+      <button class="btn pts-btn" onclick="setPts(10)" id="pts-10">10</button>
+    </div>
+  </div>
+
+  <div class="card" style="cursor:pointer" onclick="toggleRevezamento()">    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="flex:1">
+        <h3 style="margin-bottom:4px">Funções alternadas</h3>
+        <p style="font-size:13px">A cada rodada os papéis da dupla se invertem: quem dava o lance agora executa e vice-versa.</p>
+      </div>
+      <div id="toggle-track" style="flex-shrink:0;width:44px;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);position:relative;transition:background 0.2s">
+        <div id="toggle-thumb" style="position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:left 0.2s,background 0.2s"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <button class="btn btn-accent" onclick="startGame()">Iniciar jogo →</button>
+  <button class="btn btn-ghost" onclick="showRules()">Como jogar?</button>
+</div>
+
+<!-- MODAL REGRAS -->
+<div id="modal-rules" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;padding:1.5rem;overflow-y:auto;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:480px;margin:auto;margin-top:2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <h2 style="margin:0">Como jogar</h2>
+      <button onclick="hideRules()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0">×</button>
+    </div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.8">
+      <p style="margin-bottom:1rem">O <strong style="color:var(--text)">Duvido!</strong> é um jogo de blefe para 4 jogadores divididos em 2 duplas.</p>
+
+      <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">1. A categoria secreta</p>
+      <p style="margin-bottom:1rem">A cada rodada, um jogador de cada dupla vê uma categoria (ex: <em>"Atores famosos"</em>). Os parceiros não podem ver!</p>
+
+      <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">2. Os lances</p>
+      <p style="margin-bottom:1rem">Os jogadores que viram a categoria fazem lances alternados, apostando quantos itens <strong style="color:var(--text)">seu parceiro</strong> consegue falar. Cada lance deve ser maior que o anterior.</p>
+
+      <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">3. Duvidar</p>
+      <p style="margin-bottom:1rem">A qualquer momento, o jogador da vez pode <strong style="color:var(--text)">duvidar</strong> do lance anterior em vez de aumentar. Isso encerra os lances.</p>
+
+      <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">4. O desafio</p>
+      <p style="margin-bottom:1rem">O parceiro do último lance tem <strong style="color:var(--text)">60 segundos</strong> para falar o número apostado de itens da categoria. Se conseguir, ponto para a dupla dele. Se não, ponto para a outra.</p>
+
+      <p style="color:var(--accent);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem">5. Vencer</p>
+      <p>A primeira dupla a atingir o número de pontos definido no setup vence o jogo!</p>
+    </div>
+    <button class="btn btn-accent" onclick="hideRules()" style="margin-top:1.5rem">Entendi! →</button>
+  </div>
+</div>
+
+<!-- ROUND START -->
+<div id="s-roundstart" class="screen">
+  <div class="score-row" id="rs-scores"></div>
+  <div class="card">
+    <div class="badge" id="rs-badge">Rodada 1</div>
+    <h2 id="rs-title" style="margin-bottom:0.5rem"></h2>
+    <p id="rs-desc"></p>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-accent" onclick="showCategory()">Ver categoria →</button>
+  <button class="btn btn-ghost" onclick="show('s-setup')">← Voltar ao setup</button>
+</div>
+
+<!-- CATEGORY REVEAL -->
+<div id="s-category" class="screen">
+  <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="badge" id="cat-badge">Rodada 1</div>
+    <h2 style="margin-bottom:0.5rem">Categoria desta rodada:</h2>
+    <div class="big-text" id="cat-display"></div>
+    <p style="margin-top:0.75rem;font-size:13px">Apenas os jogadores indicados estão vendo. Memorizem!</p>
+  </div>
+  <button class="btn btn-accent" onclick="startBidding()">Começar lances →</button>
+</div>
+
+<!-- BIDDING -->
+<div id="s-bidding" class="screen">
+  <div class="score-row" id="bid-scores"></div>
+  <div class="card" style="text-align:center">
+    <p style="font-size:12px;margin-bottom:0.25rem" id="bid-cat-label"></p>
+    <div class="turn-label" id="bid-turn"></div>
+    <div class="bid-num" id="bid-num">—</div>
+    <div class="sub-label" id="bid-sub"></div>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-accent" id="btn-raise" onclick="goRaise()">Fazer lance →</button>
+  <button class="btn btn-danger" id="btn-doubt" onclick="doubt()" style="display:none">Duvidar!</button>
+</div>
+
+<!-- RAISE INPUT -->
+<div id="s-raise" class="screen">
+  <div class="card">
+    <h2 id="raise-title" style="margin-bottom:0.5rem"></h2>
+    <p id="raise-desc" style="margin-bottom:1rem"></p>
+    <input type="number" id="raise-input" placeholder="Número" min="1" style="font-size:24px;text-align:center;font-family:'Nunito',sans-serif;font-weight:700" />
+    <p id="raise-err" style="color:var(--danger);font-size:13px;display:none">O lance deve ser maior que o atual!</p>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-accent" onclick="confirmRaise()">Confirmar →</button>
+  <button class="btn btn-ghost" onclick="show('s-bidding')">Voltar</button>
+</div>
+
+<!-- CHALLENGE -->
+<div id="s-challenge" class="screen">
+  <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center">
+    <div class="badge">Desafio!</div>
+    <h2 id="chal-title" style="margin-bottom:0.5rem"></h2>
+    <p id="chal-desc" style="margin-bottom:0.5rem"></p>
+    <div class="big-text" id="chal-cat"></div>
+    <div class="bid-num" id="chal-num"></div>
+    <div class="sub-label">itens em 60 segundos</div>
+  </div>
+  <button class="btn btn-accent" onclick="startTimer()">Iniciar cronômetro →</button>
+</div>
+
+<!-- TIMER -->
+<div id="s-timer" class="screen">
+  <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center">
+    <h3 id="timer-player" style="margin-bottom:0.5rem"></h3>
+    <div class="big-text" id="timer-cat" style="font-size:20px;padding:1rem"></div>
+    <p id="timer-goal" style="margin:0.5rem 0"></p>
+    <div class="timer-num" id="timer-num">60</div>
+    <div class="progress-track"><div class="progress-fill" id="timer-bar"></div></div>
+  </div>
+  <button class="btn btn-success" onclick="timerResult(true)">Conseguiu! ✓</button>
+  <button class="btn btn-danger" onclick="timerResult(false)">Não conseguiu ✗</button>
+</div>
+
+<!-- RESULT -->
+<div id="s-result" class="screen">
+  <div class="score-row" id="res-scores"></div>
+  <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <h2 id="res-title" style="margin-bottom:0.75rem"></h2>
+    <p id="res-desc"></p>
+  </div>
+  <button class="btn btn-accent" onclick="nextRound()">Próxima rodada →</button>
+</div>
+
+<!-- WINNER -->
+<div id="s-winner" class="screen">
+  <div class="score-row" id="win-scores"></div>
+  <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center">
+    <div class="trophy">🏆</div>
+    <div class="winner-name" id="win-name"></div>
+    <div class="winner-sub" id="win-sub"></div>
+  </div>
+  <button class="btn btn-accent" onclick="resetGame()">Jogar novamente →</button>
+</div>
+
+<script>
+let G = {
+  p: {a:'',b:'',c:'',d:''},
+  cats: [
+    “Cities in the United States”,
+“Cities in Europe”,
+“Cities in Latin America (except Brazil)”,
+“Cities in Oceania”,
+“Cities in Africa”,
+“Cities in Asia”,
+“Capitals of Europe”,
+“Capitals of Asia”,
+“Capitals of Africa”,
+“Capitals of the Americas”,
+“States of the United States”,
+“Countries in South America”,
+“Countries in Central America”,
+“Countries in Europe”,
+“Countries in Africa”,
+“Countries in Asia”,
+“European football clubs”,
+“Non-Brazilian and non-European football clubs”,
+“English football clubs”,
+“Goalkeepers”,
+“Football managers”,
+“Nations that have won the FIFA World Cup”,
+“Players who have played for Real Madrid”,
+“Players who have played for Barcelona”,
+“Players who have played for Manchester City”,
+“Players who have played in a World Cup”,
+“Football players with L”,
+“Football players with R”,
+“Football players with S”,
+“Football players with T”,
+“NBA teams”,
+“NBA champion teams”,
+“NBA point guards”,
+“NBA centers”,
+“Formula 1 constructors”,
+“Formula 1 drivers”,
+“Tennis players”,
+“Cities with ATP tennis tournaments”,
+“Olympic gold medalists”,
+“MMA fighters”,
+“NFL teams”,
+“Olympic sports”,
+“Dog breeds”,
+“Fish”,
+“Snakes”,
+“Flowers”,
+“Mammals”,
+“Big cats”,
+“Domestic animals”,
+“Wild animals”,
+“Marine animals”,
+“Animals that fly”,
+“Animals with the letter C”,
+“Animals with the letter M”,
+“Dinosaurs”,
+“Holidays and commemorative dates”,
+“Fruits”,
+“Pizza flavors”,
+“Cheeses”,
+“Musical instruments”,
+“Rock bands”,
+“Rock songs”,
+“Songs with the letter D”,
+“Songs with the letter W”,
+“Rihanna songs”,
+“Madonna songs”,
+“Beatles songs”,
+“Michael Jackson songs”,
+“Bruno Mars songs”,
+“Coldplay songs”,
+“Netflix series”,
+“Comedy series”,
+“Crime series”,
+“Disney movies”,
+“Cartoon characters”,
+“Movie characters”,
+“FRIENDS characters”,
+“How I Met Your Mother characters”,
+“SpongeBob SquarePants characters”,
+“Dragon Ball characters”,
+“Harry Potter characters”,
+“Romance movies”,
+“Horror movies”,
+“Animated movies”,
+“Teen movies”,
+“Movies with Leonardo DiCaprio”,
+“Quentin Tarantino movies”,
+“Actresses who are or have been blonde”,
+“Actresses who are or have been redheads”,
+“Female singers who are or have been blonde”,
+“Movie directors”,
+“Famous constellations”,
+“Zodiac signs”,
+“DC superheroes”,
+“Comic book villains”,
+“Wonders of the World”,
+“Alcoholic drinks”,
+“Soft drinks”
+  ],
+  scores: {x:0,y:0},
+  round: 0,
+  cat: '',
+  bid: 0,
+  turn: 'x',
+  challenged: {dupla:'',player:''},
+  timerInterval: null,
+  timerLeft: 60,
+  usedCats: [],
+  revezamento: false,
+  winPts: 5,
+};
+
+function toggleRevezamento() {
+  G.revezamento = !G.revezamento;
+  const track = document.getElementById('toggle-track');
+  const thumb = document.getElementById('toggle-thumb');
+  if (G.revezamento) {
+    track.style.background = 'var(--accent)';
+    track.style.borderColor = 'var(--accent)';
+    thumb.style.left = '23px';
+    thumb.style.background = 'var(--accent-text)';
+  } else {
+    track.style.background = 'var(--surface2)';
+    track.style.borderColor = 'var(--border)';
+    thumb.style.left = '3px';
+    thumb.style.background = 'var(--muted)';
+  }
+}
+
+function setPts(n) {
+  G.winPts = n;
+  [3,5,7,10].forEach(v => {
+    const btn = document.getElementById('pts-'+v);
+    btn.className = 'btn pts-btn' + (v === n ? ' btn-accent' : '');
+  });
+}
+
+function showRules() {
+  document.getElementById('modal-rules').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function hideRules() {
+  document.getElementById('modal-rules').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startGame() {
+  G.p.a = document.getElementById('px-a').value.trim() || 'Jogador A';
+  G.p.b = document.getElementById('px-b').value.trim() || 'Jogador B';
+  G.p.c = document.getElementById('py-c').value.trim() || 'Jogador C';
+  G.p.d = document.getElementById('py-d').value.trim() || 'Jogador D';
+  G.scores = {x:0,y:0};
+  G.round = 0;
+  G.usedCats = [];
+  nextRound();
+}
+
+function xName() { return `${G.p.a} & ${G.p.b}`; }
+function yName() { return `${G.p.c} & ${G.p.d}`; }
+
+function getSeer(dupla) {
+  if (!G.revezamento) return dupla === 'x' ? G.p.a : G.p.c;
+  const isOdd = G.round % 2 === 1;
+  if (dupla === 'x') return isOdd ? G.p.a : G.p.b;
+  return isOdd ? G.p.c : G.p.d;
+}
+function getTarget(dupla) {
+  if (!G.revezamento) return dupla === 'x' ? G.p.b : G.p.d;
+  const isOdd = G.round % 2 === 1;
+  if (dupla === 'x') return isOdd ? G.p.b : G.p.a;
+  return isOdd ? G.p.d : G.p.c;
+}
+
+function buildScoreRow(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const lx = G.scores.x > G.scores.y;
+  const ly = G.scores.y > G.scores.x;
+  el.innerHTML = `
+    <div class="score-box${lx?' leading':''}">
+      <div class="score-num">${G.scores.x}</div>
+      <div class="score-lbl">Dupla 1<br>${G.p.a} & ${G.p.b}</div>
+    </div>
+    <div class="score-box${ly?' leading':''}">
+      <div class="score-num">${G.scores.y}</div>
+      <div class="score-lbl">Dupla 2<br>${G.p.c} & ${G.p.d}</div>
+    </div>`;
+}
+
+function nextRound() {
+  G.round++;
+  const avail = G.cats.filter(c => !G.usedCats.includes(c));
+  const pool = avail.length > 0 ? avail : G.cats;
+  if (avail.length === 0) G.usedCats = [];
+  G.cat = pool[Math.floor(Math.random()*pool.length)];
+  G.usedCats.push(G.cat);
+  G.bid = 0;
+  G.turn = G.round % 2 === 1 ? 'x' : 'y';
+  buildScoreRow('rs-scores');
+  const seerX = getSeer('x'), seerY = getSeer('y');
+  const targetX = getTarget('x'), targetY = getTarget('y');
+  document.getElementById('rs-badge').textContent = `Rodada ${G.round}`;
+  document.getElementById('rs-title').textContent = `Rodada ${G.round}`;
+  document.getElementById('rs-desc').textContent =
+    `Passe o celular para ${seerX} (Dupla 1) e ${seerY} (Dupla 2) verem a categoria. ${targetX} e ${targetY} não podem olhar!`;
+  show('s-roundstart');
+}
+
+function showCategory() {
+  document.getElementById('cat-badge').textContent = `Rodada ${G.round}`;
+  document.getElementById('cat-display').textContent = G.cat;
+  show('s-category');
+}
+
+function startBidding() {
+  buildScoreRow('bid-scores');
+  updateBidUI();
+  show('s-bidding');
+}
+
+function updateBidUI() {
+  buildScoreRow('bid-scores');
+  const bidder = getSeer(G.turn);
+  const target = getTarget(G.turn);
+  document.getElementById('bid-cat-label').textContent = `Categoria: ${G.cat}`;
+  document.getElementById('bid-turn').textContent = `Vez de ${bidder}`;
+  document.getElementById('bid-num').textContent = G.bid === 0 ? '—' : G.bid;
+  document.getElementById('bid-sub').textContent = G.bid === 0
+    ? 'Nenhum lance ainda'
+    : `${target} precisa conseguir ${G.bid} itens`;
+  const canDoubt = G.bid > 0;
+  document.getElementById('btn-doubt').style.display = canDoubt ? 'block' : 'none';
+  document.getElementById('btn-raise').textContent = G.bid === 0 ? 'Fazer lance →' : 'Aumentar o lance →';
+}
+
+function goRaise() {
+  const bidder = getSeer(G.turn);
+  const target = getTarget(G.turn);
+  document.getElementById('raise-title').textContent = `Lance de ${bidder}`;
+  document.getElementById('raise-desc').textContent = G.bid === 0
+    ? `Quantos itens de "${G.cat}" ${target} consegue falar?`
+    : `Lance atual: ${G.bid}. Qual é o novo lance?`;
+  document.getElementById('raise-input').value = '';
+  document.getElementById('raise-err').style.display = 'none';
+  show('s-raise');
+}
+
+function confirmRaise() {
+  const val = parseInt(document.getElementById('raise-input').value);
+  if (isNaN(val) || val <= G.bid) { document.getElementById('raise-err').style.display = 'block'; return; }
+  G.bid = val;
+  G.turn = G.turn === 'x' ? 'y' : 'x';
+  updateBidUI();
+  show('s-bidding');
+}
+
+function doubt() {
+  const doubter = getSeer(G.turn);
+  const chalDupla = G.turn === 'x' ? 'y' : 'x';
+  const chalPlayer = getTarget(chalDupla);
+  G.challenged = { dupla: chalDupla, player: chalPlayer };
+  document.getElementById('chal-title').textContent = `${doubter} duvidou!`;
+  document.getElementById('chal-desc').textContent = `${chalPlayer}, é hora de provar. Você tem 60 segundos:`;
+  document.getElementById('chal-cat').textContent = G.cat;
+  document.getElementById('chal-num').textContent = G.bid;
+  show('s-challenge');
+}
+
+function startTimer() {
+  document.getElementById('timer-player').textContent = `${G.challenged.player}, GO!`;
+  document.getElementById('timer-cat').textContent = G.cat;
+  document.getElementById('timer-goal').textContent = `Diga ${G.bid} itens desta categoria`;
+  G.timerLeft = 60;
+  document.getElementById('timer-num').textContent = '60';
+  document.getElementById('timer-num').classList.remove('urgent');
+  document.getElementById('timer-bar').style.width = '100%';
+  show('s-timer');
+  clearInterval(G.timerInterval);
+  G.timerInterval = setInterval(() => {
+    G.timerLeft--;
+    const el = document.getElementById('timer-num');
+    el.textContent = G.timerLeft;
+    document.getElementById('timer-bar').style.width = (G.timerLeft/60*100)+'%';
+    if (G.timerLeft <= 10) el.classList.add('urgent');
+    if (G.timerLeft <= 0) { clearInterval(G.timerInterval); }
+  }, 1000);
+}
+
+function timerResult(success) {
+  clearInterval(G.timerInterval);
+  const winner = success ? G.challenged.dupla : (G.challenged.dupla === 'x' ? 'y' : 'x');
+  G.scores[winner]++;
+  buildScoreRow('res-scores');
+  const wName = winner === 'x' ? `Dupla 1 (${xName()})` : `Dupla 2 (${yName()})`;
+  if (G.scores[winner] >= G.winPts) {
+    buildScoreRow('win-scores');
+    document.getElementById('win-name').textContent = winner === 'x' ? 'Dupla 1 venceu!' : 'Dupla 2 venceu!';
+    document.getElementById('win-sub').textContent = winner === 'x' ? `${G.p.a} e ${G.p.b} são os campeões!` : `${G.p.c} e ${G.p.d} são os campeões!`;
+    show('s-winner');
+    return;
+  }
+  document.getElementById('res-title').textContent = `Ponto para ${wName}!`;
+  document.getElementById('res-desc').textContent = success
+    ? `${G.challenged.player} conseguiu falar ${G.bid} itens de "${G.cat}"!`
+    : `${G.challenged.player} não conseguiu falar ${G.bid} itens de "${G.cat}".`;
+  show('s-result');
+}
+
+function resetGame() {
+  G.scores = {x:0,y:0};
+  G.round = 0;
+  G.usedCats = [];
+  show('s-setup');
+}
+</script>
+</body>
+</html>
